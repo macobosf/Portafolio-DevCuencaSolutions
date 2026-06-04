@@ -1,0 +1,90 @@
+@let style = getProjectStyle(project().tecnologias);
+<article class="card bg-base-100 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden">
+  <div
+    class="w-full h-48 flex items-center justify-center"
+    [style.background-color]="style.color"
+    aria-hidden="true"
+  >
+    @switch (style.icon) {
+      @case ('angular') {
+        <svg class="w-16 h-16 opacity-90" viewBox="0 0 24 24" fill="white">
+          <path opacity="0.3" d="M12 2.5L2.5 7l1.5 12.5L12 22l8-2.5 1.5-12.5L12 2.5z"/>
+          <path fill-rule="evenodd" d="M12 6.5L8 17h2l1-2.5h2l1 2.5h2L12 6.5zm0 3l1 3h-2l1-3z"/>
+        </svg>
+      }
+      @case ('react') {
+        <svg class="w-16 h-16 opacity-90" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.2">
+          <circle cx="12" cy="12" r="2.2" fill="white" stroke="none"/>
+          <ellipse cx="12" cy="12" rx="10" ry="4"/>
+          <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)"/>
+          <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)"/>
+        </svg>
+      }
+      @case ('java') {
+        <svg class="w-16 h-16 opacity-90" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 7h8l-1.5 11h-5L8 7z" fill="white" fill-opacity="0.2"/>
+          <path d="M6 7h12"/>
+          <path d="M10 4.5c0-1 1-1.5 1-2.5M13 4.5c0-1 1-1.5 1-2.5"/>
+          <path d="M16 7h2a2 2 0 010 4h-2"/>
+        </svg>
+      }
+      @case ('node') {
+        <svg class="w-16 h-16 opacity-90" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3L21 7.5v9L12 21l-9-4.5v-9L12 3z"/>
+          <path d="M9 9v6l6-6v6"/>
+        </svg>
+      }
+      @case ('network') {
+        <svg class="w-16 h-16 opacity-90" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" viewBox="0 0 24 24">
+          <path d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"/>
+        </svg>
+      }
+      @case ('python') {
+        <svg class="w-16 h-16 opacity-90" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 4h4c2 0 3 1.5 3 3.5v2H9c-2 0-3 1.5-3 3.5v1.5c0 2 1 3.5 3 3.5h4c2 0 3-1.5 3-3.5v-2"/>
+          <circle cx="12" cy="7.5" r="1" fill="white" stroke="none"/>
+          <circle cx="12" cy="16.5" r="1" fill="white" stroke="none"/>
+        </svg>
+      }
+      @default {
+        <svg class="w-16 h-16 opacity-90" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+        </svg>
+      }
+    }
+  </div>
+  <div class="card-body p-5">
+    <div class="flex items-start justify-between gap-2">
+      <h3 class="card-title text-base leading-tight">{{ project().nombre }}</h3>
+      <span
+        class="badge badge-sm shrink-0"
+        [class.badge-primary]="project().tipo === 'laboral'"
+        [class.badge-secondary]="project().tipo === 'personal'"
+        [class.badge-accent]="project().tipo === 'academico'"
+        [class.badge-neutral]="project().tipo === 'simulado'"
+      >
+        {{ project().tipo }}
+      </span>
+    </div>
+    <p class="text-sm text-base-content/70 mt-1 line-clamp-2">
+      {{ project().descripcionBreve }}
+    </p>
+    <div class="flex flex-wrap gap-1 mt-2">
+      @for (tec of project().tecnologias.slice(0, 4); track tec) {
+        <span class="badge badge-outline badge-xs">{{ tec }}</span>
+      }
+      @if (project().tecnologias.length > 4) {
+        <span class="badge badge-outline badge-xs">+{{ project().tecnologias.length - 4 }}</span>
+      }
+    </div>
+    <div class="card-actions justify-end mt-3">
+      <a
+        [routerLink]="['/proyectos', project().slug]"
+        class="btn btn-primary btn-sm"
+        [attr.aria-label]="'Ver detalle de ' + project().nombre"
+      >
+        Ver detalle
+      </a>
+    </div>
+  </div>
+</article>
