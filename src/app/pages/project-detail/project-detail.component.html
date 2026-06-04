@@ -1,0 +1,192 @@
+@if (project(); as proj) {
+
+  <!-- Hero placeholder -->
+  @let style = getProjectStyle(proj.tecnologias);
+  <div
+    class="relative w-full h-48 md:h-64 flex items-center justify-center"
+    [style.background-color]="style.color"
+    aria-hidden="true"
+  >
+    @switch (style.icon) {
+      @case ('angular') {
+        <svg class="w-20 h-20 opacity-90" viewBox="0 0 24 24" fill="white">
+          <path opacity="0.3" d="M12 2.5L2.5 7l1.5 12.5L12 22l8-2.5 1.5-12.5L12 2.5z"/>
+          <path fill-rule="evenodd" d="M12 6.5L8 17h2l1-2.5h2l1 2.5h2L12 6.5zm0 3l1 3h-2l1-3z"/>
+        </svg>
+      }
+      @case ('react') {
+        <svg class="w-20 h-20 opacity-90" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.2">
+          <circle cx="12" cy="12" r="2.2" fill="white" stroke="none"/>
+          <ellipse cx="12" cy="12" rx="10" ry="4"/>
+          <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)"/>
+          <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)"/>
+        </svg>
+      }
+      @case ('java') {
+        <svg class="w-20 h-20 opacity-90" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 7h8l-1.5 11h-5L8 7z" fill="white" fill-opacity="0.2"/>
+          <path d="M6 7h12"/>
+          <path d="M10 4.5c0-1 1-1.5 1-2.5M13 4.5c0-1 1-1.5 1-2.5"/>
+          <path d="M16 7h2a2 2 0 010 4h-2"/>
+        </svg>
+      }
+      @case ('node') {
+        <svg class="w-20 h-20 opacity-90" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3L21 7.5v9L12 21l-9-4.5v-9L12 3z"/>
+          <path d="M9 9v6l6-6v6"/>
+        </svg>
+      }
+      @case ('network') {
+        <svg class="w-20 h-20 opacity-90" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" viewBox="0 0 24 24">
+          <path d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"/>
+        </svg>
+      }
+      @case ('python') {
+        <svg class="w-20 h-20 opacity-90" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 4h4c2 0 3 1.5 3 3.5v2H9c-2 0-3 1.5-3 3.5v1.5c0 2 1 3.5 3 3.5h4c2 0 3-1.5 3-3.5v-2"/>
+          <circle cx="12" cy="7.5" r="1" fill="white" stroke="none"/>
+          <circle cx="12" cy="16.5" r="1" fill="white" stroke="none"/>
+        </svg>
+      }
+      @default {
+        <svg class="w-20 h-20 opacity-90" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+        </svg>
+      }
+    }
+    <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none"></div>
+    <div class="absolute bottom-4 left-4">
+      <span
+        class="badge badge-lg"
+        [class.badge-primary]="proj.tipo === 'laboral'"
+        [class.badge-secondary]="proj.tipo === 'personal'"
+        [class.badge-accent]="proj.tipo === 'academico'"
+        [class.badge-neutral]="proj.tipo === 'simulado'"
+      >
+        {{ proj.tipo }}
+      </span>
+    </div>
+  </div>
+
+  <!-- Contenido -->
+  <div class="container mx-auto px-4 py-10">
+
+    <!-- Breadcrumb / Back -->
+    <div class="text-sm breadcrumbs mb-6">
+      <ul>
+        <li><a routerLink="/">Inicio</a></li>
+        <li><a routerLink="/proyectos">Proyectos</a></li>
+        <li aria-current="page">{{ proj.nombre }}</li>
+      </ul>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+      <!-- Descripción principal -->
+      <div class="lg:col-span-2">
+        <h1 class="text-3xl font-bold mb-4">{{ proj.nombre }}</h1>
+        <p class="text-base-content/70 leading-relaxed">{{ proj.descripcionCompleta }}</p>
+
+        <!-- Tecnologías -->
+        <div class="mt-8">
+          <h2 class="text-lg font-semibold mb-3">Tecnologías utilizadas</h2>
+          <div class="flex flex-wrap gap-2" role="list" aria-label="Tecnologías">
+            @for (tec of proj.tecnologias; track tec) {
+              <span class="badge badge-primary badge-lg" role="listitem">{{ tec }}</span>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar info -->
+      <aside>
+        <div class="card bg-base-200 shadow-sm">
+          <div class="card-body gap-4">
+
+            <h2 class="card-title text-base">Información</h2>
+
+            @if (programadorNombre()) {
+              <div>
+                <p class="text-xs text-base-content/50 uppercase tracking-wide mb-1">Desarrollador</p>
+                <p class="font-medium">{{ programadorNombre() }}</p>
+              </div>
+            }
+
+            <div>
+              <p class="text-xs text-base-content/50 uppercase tracking-wide mb-1">Tipo</p>
+              <span
+                class="badge"
+                [class.badge-primary]="proj.tipo === 'laboral'"
+                [class.badge-secondary]="proj.tipo === 'personal'"
+                [class.badge-accent]="proj.tipo === 'academico'"
+                [class.badge-neutral]="proj.tipo === 'simulado'"
+              >
+                {{ proj.tipo }}
+              </span>
+            </div>
+
+            <div class="divider my-0"></div>
+
+            <div class="flex flex-col gap-2">
+              @if (proj.repoUrl) {
+                <a
+                  [href]="proj.repoUrl"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="btn btn-outline btn-sm gap-2"
+                  [attr.aria-label]="'Ver repositorio de ' + proj.nombre"
+                >
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+                  </svg>
+                  Ver repositorio
+                </a>
+              }
+              @if (proj.demoUrl) {
+                <a
+                  [href]="proj.demoUrl"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="btn btn-primary btn-sm gap-2"
+                  [attr.aria-label]="'Ver demo de ' + proj.nombre"
+                >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                  Ver demo
+                </a>
+              }
+            </div>
+
+            <div class="divider my-0"></div>
+
+            <a routerLink="/solicitud" class="btn btn-warning btn-sm">
+              Solicitar similar
+            </a>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+
+    <div class="mt-8">
+      <a routerLink="/proyectos" class="btn btn-ghost btn-sm gap-1">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        Volver a proyectos
+      </a>
+    </div>
+  </div>
+
+} @else if (project() === undefined) {
+  <app-loading-spinner />
+} @else {
+  <div class="container mx-auto px-4 py-20 text-center">
+    <div class="alert alert-warning max-w-sm mx-auto">
+      <span>Proyecto no encontrado.</span>
+    </div>
+    <a routerLink="/proyectos" class="btn btn-primary mt-6">Ver todos los proyectos</a>
+  </div>
+}
