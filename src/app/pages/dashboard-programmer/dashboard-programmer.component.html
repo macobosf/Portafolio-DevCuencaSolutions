@@ -1,0 +1,152 @@
+<div class="min-h-[calc(100vh-64px)] bg-base-200 py-8 px-4">
+  <div class="container mx-auto">
+
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+      <div>
+        <h1 class="text-2xl md:text-3xl font-bold">Dashboard Programador</h1>
+        <p class="text-base-content/60 mt-1">Bienvenido, <strong>{{ auth.userName() }}</strong></p>
+      </div>
+      <a routerLink="/programador/marco-cobos" class="btn btn-primary btn-sm">
+        Ver mi perfil público
+      </a>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+      <div class="stat bg-base-100 rounded-box shadow-sm">
+        <div class="stat-title">Total solicitudes</div>
+        <div class="stat-value text-primary">{{ requests().length }}</div>
+      </div>
+      <div class="stat bg-base-100 rounded-box shadow-sm">
+        <div class="stat-title">Pendientes</div>
+        <div class="stat-value text-warning">{{ pendingCount() }}</div>
+      </div>
+      <div class="stat bg-base-100 rounded-box shadow-sm">
+        <div class="stat-title">Atendidas</div>
+        <div class="stat-value text-success">{{ respondedCount() }}</div>
+      </div>
+    </div>
+
+    <!-- Tabla de solicitudes -->
+    <div class="card bg-base-100 shadow-md overflow-x-auto">
+      <div class="card-body p-0">
+        <div class="p-4 border-b border-base-200">
+          <h2 class="text-lg font-semibold">Solicitudes recibidas</h2>
+        </div>
+
+        @if (requests().length > 0) {
+          <table class="table table-zebra w-full" aria-label="Tabla de solicitudes recibidas">
+            <thead>
+              <tr>
+                <th scope="col">Solicitante</th>
+                <th scope="col">Correo</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Estado</th>
+                <th scope="col"><span class="sr-only">Acciones</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (req of requests(); track req.id) {
+                <tr class="hover:bg-base-200 cursor-pointer" (click)="selectRequest(req)">
+                  <td class="font-medium">{{ req.nombreSolicitante }}</td>
+                  <td class="text-sm text-base-content/70">{{ req.correo }}</td>
+                  <td class="text-sm">{{ req.fechaCreacion }}</td>
+                  <td>
+                    <app-request-badge [estado]="req.estado" />
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      class="btn btn-ghost btn-xs"
+                      (click)="$event.stopPropagation(); selectRequest(req)"
+                      [attr.aria-label]="'Ver detalle de solicitud de ' + req.nombreSolicitante"
+                    >
+                      Ver
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        } @else {
+          <div class="p-8 text-center text-base-content/60">
+            <p>No hay solicitudes aún.</p>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Modal detalle + edición -->
+    @if (selectedRequest(); as req) {
+      <div
+        class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+        role="dialog"
+        aria-modal="true"
+        [attr.aria-labelledby]="'detail-title-' + req.id"
+        (click)="closeDetail()"
+      >
+        <div class="card bg-base-100 shadow-xl w-full max-w-lg" (click)="$event.stopPropagation()">
+          <div class="card-body gap-4">
+            <div class="flex items-start justify-between">
+              <h2 [id]="'detail-title-' + req.id" class="card-title text-base">
+                Solicitud de {{ req.nombreSolicitante }}
+              </h2>
+              <button type="button" class="btn btn-ghost btn-sm btn-circle" (click)="closeDetail()" aria-label="Cerrar detalle">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <div class="flex flex-col gap-3 text-sm">
+              <div class="flex gap-2"><span class="font-medium w-24 shrink-0">Correo:</span><span>{{ req.correo }}</span></div>
+              <div class="flex gap-2"><span class="font-medium w-24 shrink-0">Fecha:</span><span>{{ req.fechaCreacion }}</span></div>
+              <div>
+                <p class="font-medium mb-1">Descripción:</p>
+                <p class="text-base-content/70 bg-base-200 p-3 rounded-lg">{{ req.descripcion }}</p>
+              </div>
+            </div>
+
+            <!-- Formulario de actualización -->
+            <form [formGroup]="updateForm" (ngSubmit)="saveUpdate()" class="flex flex-col gap-3 border-t border-base-200 pt-4">
+              <div class="form-control">
+                <label class="label" for="update-estado">
+                  <span class="label-text font-medium">Estado</span>
+                </label>
+                <select id="update-estado" formControlName="estado" class="select select-bordered select-sm">
+                  <option value="Pendiente">Pendiente</option>
+                  <option value="Atendida">Atendida</option>
+                </select>
+              </div>
+
+              <div class="form-control">
+                <label class="label" for="update-observacion">
+                  <span class="label-text font-medium">Observación</span>
+                </label>
+                <textarea
+                  id="update-observacion"
+                  formControlName="observacion"
+                  class="textarea textarea-bordered min-h-[80px] text-sm"
+                  placeholder="Escribe una respuesta o nota…"
+                ></textarea>
+              </div>
+
+              <div class="card-actions justify-end mt-1">
+                <button type="button" class="btn btn-ghost btn-sm" (click)="closeDetail()">Cancelar</button>
+                <button type="submit" class="btn btn-primary btn-sm" [disabled]="saving()">
+                  @if (saving()) {
+                    <span class="loading loading-spinner loading-xs" aria-hidden="true"></span>
+                  }
+                  Guardar
+                </button>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    }
+
+  </div>
+</div>
