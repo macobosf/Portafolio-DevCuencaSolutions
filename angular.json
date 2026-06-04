@@ -3,11 +3,11 @@
   "version": 1,
   "cli": {
     "packageManager": "pnpm",
-    "analytics": "09f979b5-ae76-42e6-9337-2b45011d5450"
+    "analytics": "c7843fc4-14da-4c00-bb6b-704d5408951f"
   },
   "newProjectRoot": "projects",
   "projects": {
-    "DevCuenca-Solutions": {
+    "portafolio": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -31,6 +31,12 @@
           },
           "configurations": {
             "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
               "budgets": [
                 {
                   "type": "initial",
@@ -57,10 +63,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "DevCuenca-Solutions:build:production"
+              "buildTarget": "portafolio:build:production"
             },
             "development": {
-              "buildTarget": "DevCuenca-Solutions:build:development"
+              "buildTarget": "portafolio:build:development"
             }
           },
           "defaultConfiguration": "development"
