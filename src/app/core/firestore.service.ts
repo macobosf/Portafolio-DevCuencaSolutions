@@ -13,6 +13,7 @@ import {
 import { Observable } from 'rxjs';
 import { ContactRequest } from './mock-data';
 
+
 @Injectable({ providedIn: 'root' })
 export class FirestoreService {
   private readonly db = inject(Firestore);
