@@ -3,20 +3,25 @@ import { RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { catchError, of } from 'rxjs';
 import { StrapiService } from '../../core/strapi.service';
+import { SeoService } from '../../core/seo.service';
 import { Programmer, Project, Service } from '../../core/mock-data';
 import { ProgrammerCardComponent } from '../../shared/components/programmer-card/programmer-card.component';
 import { ServiceCardComponent } from '../../shared/components/service-card/service-card.component';
 import { ProjectCardComponent } from '../../shared/components/project-card/project-card.component';
+import { SkeletonComponent } from '../../shared/components/skeleton/skeleton.component';
 import { FadeInDirective } from '../../shared/directives/fade-in.directive';
+import { PageTransitionDirective } from '../../shared/directives/page-transition.directive';
+import { CountUpDirective } from '../../shared/directives/count-up.directive';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, ProgrammerCardComponent, ServiceCardComponent, ProjectCardComponent, FadeInDirective],
+  imports: [RouterLink, ProgrammerCardComponent, ServiceCardComponent, ProjectCardComponent, SkeletonComponent, FadeInDirective, PageTransitionDirective, CountUpDirective],
   templateUrl: './home.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent {
   private readonly strapi = inject(StrapiService);
+  private readonly seo = inject(SeoService);
 
   protected readonly programmers = toSignal(
     this.strapi.getProgramadores().pipe(catchError(() => of<Programmer[]>([])))
@@ -44,6 +49,12 @@ export class HomeComponent {
   ];
 
   constructor() {
+    this.seo.updateSeo({
+      title: 'Inicio',
+      description: 'DevCuenca Solutions - Redes Mikrotik/Cisco, desarrollo web con Angular y sistemas Java. Soluciones tecnológicas profesionales en Cuenca, Ecuador.',
+      keywords: 'desarrollo web, Angular, Mikrotik, Cisco, Java, Cuenca, Ecuador',
+      url: 'https://portafolio-54995.web.app',
+    });
     afterNextRender(() => this.runTypewriter());
   }
 

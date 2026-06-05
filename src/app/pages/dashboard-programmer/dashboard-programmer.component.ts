@@ -7,6 +7,8 @@ import {
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { PageTransitionDirective } from '../../shared/directives/page-transition.directive';
+import { ToastService } from '../../shared/services/toast.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { of } from 'rxjs';
 import { AuthService } from '../../core/auth.service';
@@ -16,7 +18,7 @@ import { RequestBadgeComponent } from '../../shared/components/request-badge/req
 
 @Component({
   selector: 'app-dashboard-programmer',
-  imports: [RouterLink, ReactiveFormsModule, RequestBadgeComponent],
+  imports: [RouterLink, ReactiveFormsModule, RequestBadgeComponent, PageTransitionDirective],
   templateUrl: './dashboard-programmer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -24,6 +26,7 @@ export class DashboardProgrammerComponent {
   private readonly fb = inject(FormBuilder);
   protected readonly auth = inject(AuthService);
   private readonly firestoreService = inject(FirestoreService);
+  private readonly toast = inject(ToastService);
 
   private readonly programadorId = this.auth.programadorId();
 
@@ -72,6 +75,7 @@ export class DashboardProgrammerComponent {
         estado: this.updateForm.value.estado as 'Pendiente' | 'Atendida',
         observacion: this.updateForm.value.observacion ?? '',
       });
+      this.toast.show('Solicitud actualizada', 'success');
       this.closeDetail();
     } finally {
       this.saving.set(false);

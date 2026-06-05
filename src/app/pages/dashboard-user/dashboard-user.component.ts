@@ -1,5 +1,6 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { PageTransitionDirective } from '../../shared/directives/page-transition.directive';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { of } from 'rxjs';
 import { AuthService } from '../../core/auth.service';
@@ -9,7 +10,7 @@ import { RequestBadgeComponent } from '../../shared/components/request-badge/req
 
 @Component({
   selector: 'app-dashboard-user',
-  imports: [RouterLink, RequestBadgeComponent],
+  imports: [RouterLink, RequestBadgeComponent, PageTransitionDirective],
   templateUrl: './dashboard-user.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

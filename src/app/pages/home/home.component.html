@@ -1,6 +1,7 @@
+<div appPageTransition>
 <!-- ===================== HERO ===================== -->
 <section
-  class="min-h-[90vh] flex flex-col md:flex-row items-center justify-between px-6 md:px-16 max-w-7xl mx-auto py-20 gap-12 relative overflow-hidden"
+  class="flex flex-col md:flex-row items-center justify-between px-4 md:px-10 lg:px-16 max-w-7xl mx-auto py-10 md:py-20 gap-8 md:gap-12 relative overflow-hidden"
   aria-labelledby="hero-heading"
 >
   <!-- Decoración de fondo -->
@@ -16,29 +17,29 @@
     </span>
     <h1
       id="hero-heading"
-      class="text-4xl md:text-6xl font-bold leading-tight mb-6 reveal"
+      class="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight mb-4 md:mb-6 reveal"
       style="animation-delay: 0.1s"
     >
       DevCuenca <br /><span class="text-gold">Solutions</span>
     </h1>
     <p
-      class="text-lg text-base-content/70 max-w-lg mb-10 reveal"
+      class="text-base md:text-lg text-base-content/70 max-w-lg mb-6 md:mb-10 reveal"
       style="animation-delay: 0.2s"
       aria-live="polite"
     >
       <span>{{ typewriterText() }}</span><span class="animate-pulse" aria-hidden="true">|</span><br />
       Redes, infraestructura y desarrollo web profesional para empresas y proyectos que necesitan crecer.
     </p>
-    <div class="flex flex-wrap gap-4 reveal" style="animation-delay: 0.3s">
+    <div class="flex flex-col sm:flex-row gap-3 reveal" style="animation-delay: 0.3s">
       <a
         routerLink="/proyectos"
-        class="bg-navy text-white px-10 py-4 text-sm font-semibold uppercase tracking-widest hover:bg-gold transition-colors duration-300"
+        class="btn rounded-xl bg-blue-700 text-white hover:bg-blue-800 border-none px-6 py-3 font-semibold transition-all duration-200 w-full sm:w-auto"
       >
         Explorar proyectos
       </a>
       <a
         routerLink="/solicitud"
-        class="border border-navy text-navy px-10 py-4 text-sm font-semibold uppercase tracking-widest hover:bg-navy hover:text-white transition-colors duration-300"
+        class="btn rounded-xl bg-transparent border-2 border-blue-700 text-blue-700 hover:bg-blue-700 hover:text-white px-6 py-3 font-semibold transition-all duration-200 w-full sm:w-auto"
       >
         Contacto
       </a>
@@ -71,11 +72,15 @@
         <!-- Stats -->
         <div class="grid grid-cols-3 divide-x divide-base-300 border-t border-base-300">
           <div class="p-4 text-center">
-            <p class="text-2xl font-bold text-primary">2</p>
+            <p class="text-2xl font-bold text-primary">
+              <span appCountUp [target]="2">2</span>
+            </p>
             <p class="text-xs text-base-content/60 mt-0.5">Expertos</p>
           </div>
           <div class="p-4 text-center">
-            <p class="text-2xl font-bold text-primary">15+</p>
+            <p class="text-2xl font-bold text-primary">
+              <span appCountUp [target]="15">15</span>+
+            </p>
             <p class="text-xs text-base-content/60 mt-0.5">Proyectos</p>
           </div>
           <div class="p-4 text-center">
@@ -90,16 +95,27 @@
 
 <!-- ===================== LOADING ===================== -->
 @if (isLoading()) {
-  <div class="flex items-center justify-center py-32" aria-label="Cargando contenido">
-    <span class="loading loading-spinner loading-lg text-primary"></span>
+  <div class="py-10 md:py-16 bg-base-200">
+    <div class="container mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto mb-10">
+        @for (i of [1, 2]; track i) {
+          <app-skeleton type="profile" />
+        }
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @for (i of [1, 2, 3]; track i) {
+          <app-skeleton type="card" />
+        }
+      </div>
+    </div>
   </div>
 } @else {
 
   <!-- ===================== PROGRAMADORES ===================== -->
-  <section class="py-16 bg-base-200" aria-labelledby="about-heading" appFadeIn>
+  <section class="py-10 md:py-16 bg-base-200" aria-labelledby="about-heading" appFadeIn>
     <div class="container mx-auto px-4">
       <div class="text-center mb-10">
-        <h2 id="about-heading" class="text-3xl font-bold">Nuestro equipo</h2>
+        <h2 id="about-heading" class="text-2xl md:text-3xl font-bold">Nuestro equipo</h2>
         <p class="text-base-content/60 mt-2">Conoce a los profesionales detrás del portafolio</p>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto items-stretch">
@@ -111,13 +127,13 @@
   </section>
 
   <!-- ===================== SERVICIOS ===================== -->
-  <section class="py-16 bg-base-100" aria-labelledby="services-heading" appFadeIn>
+  <section class="py-10 md:py-16 bg-base-100" aria-labelledby="services-heading" appFadeIn>
     <div class="container mx-auto px-4">
-      <div class="text-center mb-10">
-        <h2 id="services-heading" class="text-3xl font-bold">Servicios</h2>
+      <div class="text-center mb-8 md:mb-10">
+        <h2 id="services-heading" class="text-2xl md:text-3xl font-bold">Servicios</h2>
         <p class="text-base-content/60 mt-2">¿En qué puedo ayudarte?</p>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 items-stretch">
         @for (service of services(); track service.id) {
           <app-service-card [service]="service" />
         }
@@ -126,14 +142,14 @@
   </section>
 
   <!-- ===================== PROYECTOS DESTACADOS ===================== -->
-  <section class="py-16 bg-base-200" aria-labelledby="projects-heading" appFadeIn>
+  <section class="py-10 md:py-16 bg-base-200" aria-labelledby="projects-heading" appFadeIn>
     <div class="container mx-auto px-4">
-      <div class="flex items-center justify-between mb-10">
+      <div class="flex items-center justify-between mb-6 md:mb-10">
         <div>
-          <h2 id="projects-heading" class="text-3xl font-bold">Proyectos destacados</h2>
+          <h2 id="projects-heading" class="text-2xl md:text-3xl font-bold">Proyectos destacados</h2>
           <p class="text-base-content/60 mt-1">Lo más relevante de mi portafolio</p>
         </div>
-        <a routerLink="/proyectos" class="btn btn-outline btn-sm hidden md:inline-flex">
+        <a routerLink="/proyectos" class="btn btn-sm rounded-xl border-2 border-blue-700 text-blue-700 bg-transparent hover:bg-blue-700 hover:text-white transition-all duration-200 hidden md:inline-flex">
           Ver todos
           <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
@@ -150,14 +166,14 @@
         <p class="text-center text-base-content/50 py-8">No hay proyectos destacados aún.</p>
       }
       <div class="text-center mt-8 md:hidden">
-        <a routerLink="/proyectos" class="btn btn-outline btn-sm">Ver todos los proyectos</a>
+        <a routerLink="/proyectos" class="btn btn-sm rounded-xl border-2 border-blue-700 text-blue-700 bg-transparent hover:bg-blue-700 hover:text-white transition-all duration-200">Ver todos los proyectos</a>
       </div>
     </div>
   </section>
 
   <!-- ===================== CTA CONTACTO ===================== -->
   <section
-    class="py-20 bg-gradient-to-br from-slate-900 to-blue-900 relative overflow-hidden"
+    class="py-12 md:py-20 bg-gradient-to-br from-slate-900 to-blue-900 relative overflow-hidden"
     aria-labelledby="cta-heading"
     appFadeIn
   >
@@ -173,19 +189,19 @@
         Hablemos de tu proyecto
       </span>
 
-      <h2 id="cta-heading" class="text-4xl md:text-5xl font-extrabold text-white mb-5 leading-tight">
+      <h2 id="cta-heading" class="text-2xl md:text-4xl lg:text-5xl font-extrabold text-white mb-4 md:mb-5 leading-tight">
         ¿Tienes un proyecto en mente?
       </h2>
 
-      <p class="text-blue-200 text-lg md:text-xl mb-10 max-w-2xl mx-auto leading-relaxed">
+      <p class="text-blue-200 text-base md:text-lg lg:text-xl mb-8 md:mb-10 max-w-2xl mx-auto leading-relaxed">
         Cuéntanos tu idea y construiremos juntos la solución tecnológica que tu empresa necesita —
         desde infraestructura de redes hasta desarrollo web a medida.
       </p>
 
-      <div class="flex flex-wrap justify-center gap-4 mb-12">
+      <div class="flex flex-col sm:flex-row justify-center gap-3 mb-8 md:mb-12">
         <a
           routerLink="/solicitud"
-          class="inline-flex items-center gap-2 bg-white text-slate-900 font-bold px-8 py-4 rounded-lg text-base transition-all duration-300 hover:bg-blue-50 hover:shadow-2xl hover:-translate-y-0.5"
+          class="inline-flex items-center justify-center gap-2 bg-white text-slate-900 font-bold px-8 py-4 rounded-xl text-base transition-all duration-200 hover:bg-blue-50 hover:shadow-2xl hover:-translate-y-0.5 w-full sm:w-auto"
         >
           Enviar Solicitud
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -194,7 +210,7 @@
         </a>
         <a
           routerLink="/proyectos"
-          class="inline-flex items-center gap-2 border-2 border-white text-white font-bold px-8 py-4 rounded-lg text-base transition-all duration-300 hover:bg-white/10 hover:shadow-2xl hover:-translate-y-0.5"
+          class="inline-flex items-center justify-center gap-2 border-2 border-white text-white font-bold px-8 py-4 rounded-xl text-base transition-all duration-200 hover:bg-white/10 hover:shadow-2xl hover:-translate-y-0.5 w-full sm:w-auto"
         >
           Ver Proyectos
         </a>
@@ -218,3 +234,4 @@
   </section>
 
 }
+</div>

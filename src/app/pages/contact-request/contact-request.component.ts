@@ -7,12 +7,14 @@ import {
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink, Router } from '@angular/router';
 import { AuthService } from '../../core/auth.service';
+import { PageTransitionDirective } from '../../shared/directives/page-transition.directive';
 import { FirestoreService } from '../../core/firestore.service';
 import { PROGRAMADORES } from '../../core/mock-data';
+import { ToastService } from '../../shared/services/toast.service';
 
 @Component({
   selector: 'app-contact-request',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, PageTransitionDirective],
   templateUrl: './contact-request.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -20,6 +22,7 @@ export class ContactRequestComponent {
   private readonly fb = inject(FormBuilder);
   protected readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly toast = inject(ToastService);
 
   constructor() {
     if (this.auth.isProgrammer()) {
@@ -69,6 +72,9 @@ export class ContactRequestComponent {
         observacion: '',
       });
       this.submitted.set(true);
+      this.toast.show('¡Solicitud enviada exitosamente!', 'success');
+      const modal = document.getElementById('success_modal') as HTMLDialogElement;
+      modal?.showModal();
     } catch {
       this.errorMessage.set('Error al enviar la solicitud. Intenta de nuevo.');
     } finally {

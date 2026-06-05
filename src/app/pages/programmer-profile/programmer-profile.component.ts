@@ -1,22 +1,25 @@
-import { Component, ChangeDetectionStrategy, inject, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, computed, effect } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { switchMap, map, catchError, of, shareReplay } from 'rxjs';
 import { StrapiService } from '../../core/strapi.service';
+import { SeoService } from '../../core/seo.service';
 import { Programmer, Project } from '../../core/mock-data';
 import { ProjectCardComponent } from '../../shared/components/project-card/project-card.component';
+import { SkeletonComponent } from '../../shared/components/skeleton/skeleton.component';
 import { FadeInDirective } from '../../shared/directives/fade-in.directive';
-import { LoadingSpinnerComponent } from '../../shared/components/loading-spinner/loading-spinner.component';
+import { PageTransitionDirective } from '../../shared/directives/page-transition.directive';
 
 @Component({
   selector: 'app-programmer-profile',
-  imports: [RouterLink, ProjectCardComponent, FadeInDirective, LoadingSpinnerComponent],
+  imports: [RouterLink, ProjectCardComponent, SkeletonComponent, FadeInDirective, PageTransitionDirective],
   templateUrl: './programmer-profile.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProgrammerProfileComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly strapi = inject(StrapiService);
+  private readonly seo = inject(SeoService);
 
   // shareReplay(1) evita una segunda llamada HTTP cuando projects$ se suscribe al mismo observable
   private readonly programmer$ = this.route.params.pipe(
@@ -43,4 +46,18 @@ export class ProgrammerProfileComponent {
   );
 
   protected readonly projects = computed(() => this.projectsRaw() ?? []);
+
+  constructor() {
+    effect(() => {
+      const dev = this.programmer();
+      if (dev) {
+        this.seo.updateSeo({
+          title: dev.nombre,
+          description: dev.descripcionBreve ?? dev.descripcion,
+          keywords: dev.especialidad,
+          url: `https://portafolio-54995.web.app/programador/${dev.slug}`,
+        });
+      }
+    });
+  }
 }

@@ -1,7 +1,8 @@
+<div appPageTransition>
 @if (programmer(); as dev) {
 
   <!-- Banner -->
-  <div class="bg-gradient-to-br from-blue-900 via-blue-700 to-blue-600 py-16 px-4" appFadeIn>
+  <div class="bg-gradient-to-br from-blue-900 via-blue-700 to-blue-600 py-10 md:py-16 px-4" appFadeIn>
     <div class="container mx-auto flex flex-col md:flex-row items-center gap-8">
       <div class="avatar">
         <div class="w-32 md:w-40 rounded-full ring ring-white/30 ring-offset-2 ring-offset-blue-800 shadow-xl">
@@ -16,14 +17,14 @@
             <span class="badge badge-error badge-sm">No disponible</span>
           }
         </div>
-        <h1 class="text-3xl md:text-4xl font-bold">{{ dev.nombre }}</h1>
-        <p class="text-blue-200 text-lg mt-1">{{ dev.especialidad }}</p>
+        <h1 class="text-2xl md:text-4xl font-bold">{{ dev.nombre }}</h1>
+        <p class="text-blue-200 text-base md:text-lg mt-1">{{ dev.especialidad }}</p>
         <div class="flex flex-wrap justify-center md:justify-start gap-3 mt-4">
           <a
             [href]="dev.github"
             target="_blank"
             rel="noopener noreferrer"
-            class="btn btn-sm btn-ghost text-white border border-white/30 hover:bg-white/10"
+            class="btn btn-sm btn-ghost rounded-xl text-white border border-white/30 hover:bg-white/10"
             [attr.aria-label]="'GitHub de ' + dev.nombre"
           >
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -35,7 +36,7 @@
             [href]="dev.linkedin"
             target="_blank"
             rel="noopener noreferrer"
-            class="btn btn-sm btn-ghost text-white border border-white/30 hover:bg-white/10"
+            class="btn btn-sm btn-ghost rounded-xl text-white border border-white/30 hover:bg-white/10"
             [attr.aria-label]="'LinkedIn de ' + dev.nombre"
           >
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -50,7 +51,7 @@
   </div>
 
   <!-- Contenido principal -->
-  <div class="container mx-auto px-4 py-10" appFadeIn>
+  <div class="container mx-auto px-4 py-8 md:py-10" appFadeIn>
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
       <!-- Columna izquierda: bio + habilidades -->
@@ -110,12 +111,26 @@
   </div>
 
 } @else if (programmer() === undefined) {
-  <app-loading-spinner />
+  <div class="container mx-auto px-4 py-10">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div class="lg:col-span-1">
+        <app-skeleton type="profile" />
+      </div>
+      <div class="lg:col-span-2">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          @for (i of [1, 2, 3, 4]; track i) {
+            <app-skeleton type="card" />
+          }
+        </div>
+      </div>
+    </div>
+  </div>
 } @else {
   <div class="container mx-auto px-4 py-20 text-center">
     <div class="alert alert-warning max-w-sm mx-auto">
       <span>Programador no encontrado.</span>
     </div>
-    <a routerLink="/" class="btn btn-primary mt-6">Volver al inicio</a>
+    <a routerLink="/" class="btn rounded-xl mt-6 bg-blue-700 text-white hover:bg-blue-800 border-none transition-all duration-200">Volver al inicio</a>
   </div>
 }
+</div>

@@ -71,16 +71,21 @@
     </p>
     <div class="flex flex-wrap gap-1 mt-2">
       @for (tec of project().tecnologias.slice(0, 4); track tec) {
-        <span class="badge badge-outline badge-xs">{{ tec }}</span>
+        <span
+          class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium"
+          [class]="getTechColor(tec)"
+        >{{ tec }}</span>
       }
       @if (project().tecnologias.length > 4) {
-        <span class="badge badge-outline badge-xs">+{{ project().tecnologias.length - 4 }}</span>
+        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700 border border-gray-200">
+          +{{ project().tecnologias.length - 4 }}
+        </span>
       }
     </div>
     <div class="card-actions justify-end mt-auto pt-3">
       <a
         [routerLink]="['/proyectos', project().slug]"
-        class="btn btn-primary btn-sm"
+        class="btn btn-sm rounded-xl bg-blue-700 text-white hover:bg-blue-800 border-none transition-all duration-200"
         [attr.aria-label]="'Ver detalle de ' + project().nombre"
       >
         Ver detalle

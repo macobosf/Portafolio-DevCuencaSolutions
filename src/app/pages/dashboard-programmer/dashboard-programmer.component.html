@@ -1,4 +1,4 @@
-<div class="min-h-[calc(100vh-64px)] bg-base-200 py-8 px-4">
+<div class="min-h-[calc(100vh-64px)] bg-base-200 py-8 px-4" appPageTransition>
   <div class="container mx-auto">
 
     <!-- Header -->
@@ -7,7 +7,7 @@
         <h1 class="text-2xl md:text-3xl font-bold">Dashboard Programador</h1>
         <p class="text-base-content/60 mt-1">Bienvenido, <strong>{{ auth.userName() }}</strong></p>
       </div>
-      <a routerLink="/programador/marco-cobos" class="btn btn-primary btn-sm">
+      <a routerLink="/programador/marco-cobos" class="btn btn-sm rounded-xl bg-blue-700 text-white hover:bg-blue-800 border-none transition-all duration-200">
         Ver mi perfil público
       </a>
     </div>
@@ -28,47 +28,71 @@
       </div>
     </div>
 
-    <!-- Tabla de solicitudes -->
-    <div class="card bg-base-100 shadow-md overflow-x-auto">
+    <!-- Solicitudes -->
+    <div class="card bg-base-100 shadow-md">
       <div class="card-body p-0">
         <div class="p-4 border-b border-base-200">
           <h2 class="text-lg font-semibold">Solicitudes recibidas</h2>
         </div>
 
         @if (requests().length > 0) {
-          <table class="table table-zebra w-full" aria-label="Tabla de solicitudes recibidas">
-            <thead>
-              <tr>
-                <th scope="col">Solicitante</th>
-                <th scope="col">Correo</th>
-                <th scope="col">Fecha</th>
-                <th scope="col">Estado</th>
-                <th scope="col"><span class="sr-only">Acciones</span></th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (req of requests(); track req.id) {
-                <tr class="hover:bg-base-200 cursor-pointer" (click)="selectRequest(req)">
-                  <td class="font-medium">{{ req.nombreSolicitante }}</td>
-                  <td class="text-sm text-base-content/70">{{ req.correo }}</td>
-                  <td class="text-sm">{{ req.fechaCreacion }}</td>
-                  <td>
-                    <app-request-badge [estado]="req.estado" />
-                  </td>
-                  <td>
-                    <button
-                      type="button"
-                      class="btn btn-ghost btn-xs"
-                      (click)="$event.stopPropagation(); selectRequest(req)"
-                      [attr.aria-label]="'Ver detalle de solicitud de ' + req.nombreSolicitante"
-                    >
-                      Ver
-                    </button>
-                  </td>
+
+          <!-- Móvil: cards (oculto en md+) -->
+          <div class="md:hidden divide-y divide-base-200">
+            @for (req of requests(); track req.id) {
+              <button
+                type="button"
+                class="w-full text-left p-4 hover:bg-base-200 active:bg-base-300 transition-colors"
+                (click)="selectRequest(req)"
+                [attr.aria-label]="'Ver solicitud de ' + req.nombreSolicitante"
+              >
+                <div class="flex items-start justify-between gap-2 mb-1">
+                  <p class="font-semibold text-sm leading-tight">{{ req.nombreSolicitante }}</p>
+                  <app-request-badge [estado]="req.estado" />
+                </div>
+                <p class="text-xs text-base-content/60 truncate">{{ req.correo }}</p>
+                <p class="text-xs text-base-content/40 mt-0.5">{{ req.fechaCreacion }}</p>
+              </button>
+            }
+          </div>
+
+          <!-- Desktop: tabla (oculto en < md) -->
+          <div class="hidden md:block overflow-x-auto">
+            <table class="table table-zebra w-full" aria-label="Tabla de solicitudes recibidas">
+              <thead>
+                <tr>
+                  <th scope="col">Solicitante</th>
+                  <th scope="col">Correo</th>
+                  <th scope="col">Fecha</th>
+                  <th scope="col">Estado</th>
+                  <th scope="col"><span class="sr-only">Acciones</span></th>
                 </tr>
-              }
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                @for (req of requests(); track req.id) {
+                  <tr class="hover:bg-base-200 cursor-pointer" (click)="selectRequest(req)">
+                    <td class="font-medium">{{ req.nombreSolicitante }}</td>
+                    <td class="text-sm text-base-content/70">{{ req.correo }}</td>
+                    <td class="text-sm">{{ req.fechaCreacion }}</td>
+                    <td>
+                      <app-request-badge [estado]="req.estado" />
+                    </td>
+                    <td>
+                      <button
+                        type="button"
+                        class="btn btn-ghost btn-xs rounded-xl"
+                        (click)="$event.stopPropagation(); selectRequest(req)"
+                        [attr.aria-label]="'Ver detalle de solicitud de ' + req.nombreSolicitante"
+                      >
+                        Ver
+                      </button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+
         } @else {
           <div class="p-8 text-center text-base-content/60">
             <p>No hay solicitudes aún.</p>
@@ -132,9 +156,9 @@
                 ></textarea>
               </div>
 
-              <div class="card-actions justify-end mt-1">
-                <button type="button" class="btn btn-ghost btn-sm" (click)="closeDetail()">Cancelar</button>
-                <button type="submit" class="btn btn-primary btn-sm" [disabled]="saving()">
+              <div class="flex flex-col-reverse sm:flex-row sm:justify-end gap-2 mt-1">
+                <button type="button" class="btn btn-ghost btn-sm rounded-xl w-full sm:w-auto" (click)="closeDetail()">Cancelar</button>
+                <button type="submit" class="btn btn-sm rounded-xl bg-green-600 text-white hover:bg-green-700 border-none transition-all duration-200 w-full sm:w-auto" [disabled]="saving()">
                   @if (saving()) {
                     <span class="loading loading-spinner loading-xs" aria-hidden="true"></span>
                   }

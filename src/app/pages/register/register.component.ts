@@ -14,6 +14,8 @@ import {
 import { RouterLink, Router } from '@angular/router';
 
 import { AuthService } from '../../core/auth.service';
+import { PageTransitionDirective } from '../../shared/directives/page-transition.directive';
+import { ToastService } from '../../shared/services/toast.service';
 
 function passwordMatchValidator(
   control: AbstractControl,
@@ -38,7 +40,7 @@ function parseFirebaseError(error: unknown): string {
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, PageTransitionDirective],
   templateUrl: './register.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -46,10 +48,12 @@ export class RegisterComponent {
   private readonly fb = inject(FormBuilder);
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly toast = inject(ToastService);
 
   protected readonly submitted = signal(false);
   protected readonly submitting = signal(false);
   protected readonly errorMessage = signal<string | null>(null);
+  protected readonly emailExists = signal(false);
   protected readonly showPassword = signal(false);
   protected readonly showConfirmPassword = signal(false);
   protected readonly capsLockOn = signal(false);
@@ -80,15 +84,21 @@ export class RegisterComponent {
     if (this.form.invalid || this.submitting()) return;
     this.submitting.set(true);
     this.errorMessage.set(null);
+    this.emailExists.set(false);
     try {
       await this.auth.registerWithEmail(
         this.form.value.email!,
         this.form.value.password!,
         this.form.value.nombre!,
       );
+      this.toast.show('¡Cuenta creada exitosamente!', 'success');
       this.router.navigate(['/dashboard/usuario']);
     } catch (e) {
-      this.errorMessage.set(parseFirebaseError(e));
+      if ((e as { code?: string }).code === 'auth/email-already-in-use') {
+        this.emailExists.set(true);
+      } else {
+        this.errorMessage.set(parseFirebaseError(e));
+      }
       this.submitting.set(false);
     }
   }

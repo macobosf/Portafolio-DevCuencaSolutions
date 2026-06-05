@@ -9,6 +9,8 @@ import {
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink, Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../core/auth.service';
+import { PageTransitionDirective } from '../../shared/directives/page-transition.directive';
+import { ToastService } from '../../shared/services/toast.service';
 
 function parseFirebaseError(error: unknown): string {
   const code = (error as { code?: string }).code;
@@ -30,7 +32,7 @@ function parseFirebaseError(error: unknown): string {
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, PageTransitionDirective],
   templateUrl: './login.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -40,6 +42,7 @@ export class LoginComponent {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly injector = inject(Injector);
+  private readonly toast = inject(ToastService);
 
   protected readonly form = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -48,6 +51,7 @@ export class LoginComponent {
 
   protected readonly submitting = signal(false);
   protected readonly errorMessage = signal<string | null>(null);
+  protected readonly googleConflict = signal(false);
   protected readonly showPassword = signal(false);
   protected readonly capsLockOn = signal(false);
 
@@ -84,6 +88,7 @@ export class LoginComponent {
         this.form.value.email!,
         this.form.value.password!,
       );
+      this.toast.show('¡Bienvenido de vuelta!', 'success');
       this.navigateAfterLogin();
     } catch (e) {
       this.errorMessage.set(parseFirebaseError(e));
@@ -93,11 +98,16 @@ export class LoginComponent {
 
   protected async loginWithGoogle(): Promise<void> {
     this.errorMessage.set(null);
+    this.googleConflict.set(false);
     try {
       await this.auth.loginWithGoogle();
       this.navigateAfterLogin();
     } catch (e) {
-      this.errorMessage.set(parseFirebaseError(e));
+      if ((e as { code?: string }).code === 'auth/account-exists-with-different-credential') {
+        this.googleConflict.set(true);
+      } else {
+        this.errorMessage.set(parseFirebaseError(e));
+      }
     }
   }
 }

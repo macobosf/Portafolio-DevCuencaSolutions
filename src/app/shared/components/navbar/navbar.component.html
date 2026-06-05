@@ -7,7 +7,7 @@
         <button
           tabindex="0"
           type="button"
-          class="btn btn-ghost lg:hidden"
+          class="btn btn-ghost rounded-xl lg:hidden"
           aria-label="Abrir menú de navegación"
         >
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -16,31 +16,68 @@
         </button>
         <ul
           tabindex="0"
-          class="menu menu-sm dropdown-content bg-base-100 rounded-box z-50 mt-3 w-56 p-2 shadow"
+          class="menu dropdown-content bg-base-100 rounded-box z-50 mt-3 w-72 p-2 shadow-lg border border-base-200"
           role="menu"
         >
-          <li role="none"><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" role="menuitem">Inicio</a></li>
           <li role="none">
-            <span class="font-medium text-base-content/60 text-xs uppercase tracking-wide px-3 pt-2 pb-1">Programadores</span>
+            <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" role="menuitem"
+               class="py-3 min-h-[44px] flex items-center font-medium">
+              Inicio
+            </a>
+          </li>
+          <li role="none">
+            <span class="font-semibold text-base-content/50 text-xs uppercase tracking-widest px-4 pt-3 pb-1 block">
+              Programadores
+            </span>
             <ul>
-              <li role="none"><a routerLink="/programador/marco-cobos" routerLinkActive="active" role="menuitem">Marco Cobos</a></li>
-              <li role="none"><a routerLink="/programador/christian-astudillo" routerLinkActive="active" role="menuitem">Christian Astudillo</a></li>
+              <li role="none">
+                <a routerLink="/programador/marco-cobos" routerLinkActive="active" role="menuitem"
+                   class="py-3 min-h-[44px] flex items-center pl-6">
+                  Marco Cobos
+                </a>
+              </li>
+              <li role="none">
+                <a routerLink="/programador/christian-astudillo" routerLinkActive="active" role="menuitem"
+                   class="py-3 min-h-[44px] flex items-center pl-6">
+                  Christian Astudillo
+                </a>
+              </li>
             </ul>
           </li>
-          <li role="none"><a routerLink="/proyectos" routerLinkActive="active" role="menuitem">Proyectos</a></li>
+          <li role="none">
+            <a routerLink="/proyectos" routerLinkActive="active" role="menuitem"
+               class="py-3 min-h-[44px] flex items-center font-medium">
+              Proyectos
+            </a>
+          </li>
           @if (!auth.isProgrammer()) {
-            <li role="none"><a routerLink="/solicitud" routerLinkActive="active" role="menuitem">Contacto</a></li>
+            <li role="none">
+              <a routerLink="/solicitud" routerLinkActive="active" role="menuitem"
+                 class="py-3 min-h-[44px] flex items-center font-medium">
+                Contacto
+              </a>
+            </li>
           }
           @if (auth.isAuthenticated()) {
             @if (auth.isProgrammer()) {
-              <li role="none"><a routerLink="/dashboard/programador" routerLinkActive="active" role="menuitem">Dashboard</a></li>
+              <li role="none">
+                <a routerLink="/dashboard/programador" routerLinkActive="active" role="menuitem"
+                   class="py-3 min-h-[44px] flex items-center font-medium">
+                  Dashboard
+                </a>
+              </li>
             } @else {
-              <li role="none"><a routerLink="/dashboard/usuario" routerLinkActive="active" role="menuitem">Mis solicitudes</a></li>
+              <li role="none">
+                <a routerLink="/dashboard/usuario" routerLinkActive="active" role="menuitem"
+                   class="py-3 min-h-[44px] flex items-center font-medium">
+                  Mis solicitudes
+                </a>
+              </li>
             }
           }
         </ul>
       </div>
-      <a routerLink="/" class="btn btn-ghost text-lg font-bold gap-2" aria-label="DevCuenca Solutions - Inicio">
+      <a routerLink="/" class="btn btn-ghost rounded-xl text-lg font-bold gap-2" aria-label="DevCuenca Solutions - Inicio">
         <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
         </svg>
@@ -53,9 +90,9 @@
     <nav class="hidden lg:flex items-center gap-1 h-full" aria-label="Links de navegación">
       <a
         routerLink="/"
-        routerLinkActive="text-primary font-semibold"
+        routerLinkActive="text-blue-700 font-semibold border-b-2 border-blue-700"
         [routerLinkActiveOptions]="{exact: true}"
-        class="h-full px-3 flex items-center rounded-md text-sm text-gray-600 hover:text-blue-700 hover:bg-blue-50 transition-colors"
+        class="relative h-full px-3 flex items-center rounded-md text-sm text-gray-600 hover:text-blue-700 hover:bg-blue-50 transition-colors"
       >Inicio</a>
 
       <!-- Programadores dropdown -->
@@ -97,29 +134,29 @@
 
       <a
         routerLink="/proyectos"
-        routerLinkActive="text-primary font-semibold"
-        class="h-full px-3 flex items-center rounded-md text-sm text-gray-600 hover:text-blue-700 hover:bg-blue-50 transition-colors"
+        routerLinkActive="text-blue-700 font-semibold border-b-2 border-blue-700"
+        class="relative h-full px-3 flex items-center rounded-md text-sm text-gray-600 hover:text-blue-700 hover:bg-blue-50 transition-colors"
       >Proyectos</a>
 
       @if (!auth.isProgrammer()) {
         <a
           routerLink="/solicitud"
-          routerLinkActive="text-primary font-semibold"
-          class="h-full px-3 flex items-center rounded-md text-sm text-gray-600 hover:text-blue-700 hover:bg-blue-50 transition-colors"
+          routerLinkActive="text-blue-700 font-semibold border-b-2 border-blue-700"
+          class="relative h-full px-3 flex items-center rounded-md text-sm text-gray-600 hover:text-blue-700 hover:bg-blue-50 transition-colors"
         >Contacto</a>
       }
       @if (auth.isAuthenticated()) {
         @if (auth.isProgrammer()) {
           <a
             routerLink="/dashboard/programador"
-            routerLinkActive="text-primary font-semibold"
-            class="h-full px-3 flex items-center rounded-md text-sm text-gray-600 hover:text-blue-700 hover:bg-blue-50 transition-colors"
+            routerLinkActive="text-blue-700 font-semibold border-b-2 border-blue-700"
+            class="relative h-full px-3 flex items-center rounded-md text-sm text-gray-600 hover:text-blue-700 hover:bg-blue-50 transition-colors"
           >Dashboard</a>
         } @else {
           <a
             routerLink="/dashboard/usuario"
-            routerLinkActive="text-primary font-semibold"
-            class="h-full px-3 flex items-center rounded-md text-sm text-gray-600 hover:text-blue-700 hover:bg-blue-50 transition-colors"
+            routerLinkActive="text-blue-700 font-semibold border-b-2 border-blue-700"
+            class="relative h-full px-3 flex items-center rounded-md text-sm text-gray-600 hover:text-blue-700 hover:bg-blue-50 transition-colors"
           >Mis solicitudes</a>
         }
       }
@@ -129,7 +166,7 @@
     <div class="flex items-center gap-2">
       @if (auth.isAuthenticated()) {
         <span class="text-sm text-base-content/60 hidden sm:block">{{ auth.getUserName() }}</span>
-        <button type="button" class="btn btn-outline btn-sm" (click)="logout()">
+        <button type="button" class="btn btn-sm rounded-xl border-2 border-blue-700 text-blue-700 bg-transparent hover:bg-blue-700 hover:text-white transition-all duration-200" (click)="confirmLogout()">
           Salir
         </button>
       }

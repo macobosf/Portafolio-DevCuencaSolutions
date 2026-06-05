@@ -22,4 +22,23 @@ export class ProjectCardComponent {
     if (techs.some(t => ['javascript', 'html', 'css'].some(k => t.includes(k)))) return { color: '#7c3aed', icon: 'code' };
     return { color: '#475569', icon: 'code' };
   }
+
+  protected getTechColor(tech: string): string {
+    const t = tech.toLowerCase();
+    if (t.includes('angular')) return 'bg-red-100 text-red-700 border border-red-200';
+    if (t.includes('typescript')) return 'bg-blue-100 text-blue-700 border border-blue-200';
+    if (t.includes('javascript')) return 'bg-yellow-100 text-yellow-700 border border-yellow-200';
+    if (t.includes('spring')) return 'bg-green-100 text-green-700 border border-green-200';
+    if (t.includes('java')) return 'bg-orange-100 text-orange-700 border border-orange-200';
+    if (t.includes('node')) return 'bg-green-100 text-green-700 border border-green-200';
+    if (t.includes('react')) return 'bg-cyan-100 text-cyan-700 border border-cyan-200';
+    if (t.includes('html')) return 'bg-orange-100 text-orange-700 border border-orange-200';
+    if (t.includes('tailwind')) return 'bg-teal-100 text-teal-700 border border-teal-200';
+    if (t.includes('css')) return 'bg-blue-100 text-blue-700 border border-blue-200';
+    if (t.includes('firebase')) return 'bg-yellow-100 text-yellow-700 border border-yellow-200';
+    if (t.includes('postgresql') || t.includes('postgres')) return 'bg-indigo-100 text-indigo-700 border border-indigo-200';
+    if (t.includes('mysql')) return 'bg-blue-100 text-blue-700 border border-blue-200';
+    if (t.includes('python')) return 'bg-yellow-100 text-yellow-700 border border-yellow-200';
+    return 'bg-gray-100 text-gray-700 border border-gray-200';
+  }
 }

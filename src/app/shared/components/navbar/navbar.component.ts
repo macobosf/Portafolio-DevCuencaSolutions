@@ -16,4 +16,10 @@ export class NavbarComponent {
     await this.auth.logout();
     this.router.navigate(['/']);
   }
+
+  protected async confirmLogout(): Promise<void> {
+    if (confirm('¿Estás seguro que deseas cerrar sesión?')) {
+      await this.logout();
+    }
+  }
 }
