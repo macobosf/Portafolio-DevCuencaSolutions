@@ -1,6 +1,9 @@
-import { Component, ChangeDetectionStrategy, signal, afterNextRender } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal, afterNextRender, inject, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { PROGRAMADORES, PROJECTS, SERVICES } from '../../core/mock-data';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { catchError, of } from 'rxjs';
+import { StrapiService } from '../../core/strapi.service';
+import { Programmer, Project, Service } from '../../core/mock-data';
 import { ProgrammerCardComponent } from '../../shared/components/programmer-card/programmer-card.component';
 import { ServiceCardComponent } from '../../shared/components/service-card/service-card.component';
 import { ProjectCardComponent } from '../../shared/components/project-card/project-card.component';
@@ -13,10 +16,25 @@ import { FadeInDirective } from '../../shared/directives/fade-in.directive';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent {
-  protected readonly programmers = PROGRAMADORES;
-  protected readonly services = SERVICES;
-  protected readonly featuredProjects = PROJECTS.filter((p) => p.destacado);
-  // signal en lugar de manipulación directa del DOM para que OnPush detecte cada cambio de carácter
+  private readonly strapi = inject(StrapiService);
+
+  protected readonly programmers = toSignal(
+    this.strapi.getProgramadores().pipe(catchError(() => of<Programmer[]>([])))
+  );
+  protected readonly services = toSignal(
+    this.strapi.getServicios().pipe(catchError(() => of<Service[]>([])))
+  );
+  protected readonly featuredProjects = toSignal(
+    this.strapi.getProyectosDestacados().pipe(catchError(() => of<Project[]>([])))
+  );
+
+  protected readonly isLoading = computed(
+    () =>
+      this.programmers() === undefined ||
+      this.services() === undefined ||
+      this.featuredProjects() === undefined
+  );
+
   protected readonly typewriterText = signal('');
 
   private readonly phrases = [
@@ -26,7 +44,6 @@ export class HomeComponent {
   ];
 
   constructor() {
-    // afterNextRender solo ejecuta en el browser; ngAfterViewInit también corre en SSR y rompería los setTimeout
     afterNextRender(() => this.runTypewriter());
   }
 
@@ -42,14 +59,14 @@ export class HomeComponent {
         if (charIndex === 0) {
           deleting = false;
           phraseIndex = (phraseIndex + 1) % this.phrases.length;
-          setTimeout(tick, 400); // pausa antes de empezar a escribir la siguiente frase
+          setTimeout(tick, 400);
           return;
         }
       } else {
         this.typewriterText.set(phrase.slice(0, ++charIndex));
         if (charIndex === phrase.length) {
           deleting = true;
-          setTimeout(tick, 1800); // pausa al terminar la frase antes de borrar
+          setTimeout(tick, 1800);
           return;
         }
       }

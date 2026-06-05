@@ -1,5 +1,5 @@
 @let style = getProjectStyle(project().tecnologias);
-<article class="card bg-base-100 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden">
+<article class="card bg-base-100 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden h-full flex flex-col">
   <div
     class="w-full h-48 flex items-center justify-center"
     [style.background-color]="style.color"
@@ -53,7 +53,7 @@
       }
     }
   </div>
-  <div class="card-body p-5">
+  <div class="card-body p-5 flex flex-col flex-1">
     <div class="flex items-start justify-between gap-2">
       <h3 class="card-title text-base leading-tight">{{ project().nombre }}</h3>
       <span
@@ -77,7 +77,7 @@
         <span class="badge badge-outline badge-xs">+{{ project().tecnologias.length - 4 }}</span>
       }
     </div>
-    <div class="card-actions justify-end mt-3">
+    <div class="card-actions justify-end mt-auto pt-3">
       <a
         [routerLink]="['/proyectos', project().slug]"
         class="btn btn-primary btn-sm"

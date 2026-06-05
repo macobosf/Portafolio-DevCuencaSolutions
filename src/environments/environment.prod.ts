@@ -1,5 +1,6 @@
 export const environment = {
   production: true,
+  strapiUrl: 'https://creative-ducks-5c57b268fa.strapiapp.com/api',
   firebase: {
     apiKey: 'AIzaSyBxZngX-7eQ4NaIOWdEFF9jzXIntJ86QcE',
     authDomain: 'portafolio-54995.firebaseapp.com',

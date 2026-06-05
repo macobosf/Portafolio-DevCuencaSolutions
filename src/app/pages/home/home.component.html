@@ -88,120 +88,133 @@
   </div>
 </section>
 
-<!-- ===================== PROGRAMADORES ===================== -->
-<section class="py-16 bg-base-200" aria-labelledby="about-heading" appFadeIn>
-  <div class="container mx-auto px-4">
-    <div class="text-center mb-10">
-      <h2 id="about-heading" class="text-3xl font-bold">Nuestro equipo</h2>
-      <p class="text-base-content/60 mt-2">Conoce a los profesionales detrás del portafolio</p>
+<!-- ===================== LOADING ===================== -->
+@if (isLoading()) {
+  <div class="flex items-center justify-center py-32" aria-label="Cargando contenido">
+    <span class="loading loading-spinner loading-lg text-primary"></span>
+  </div>
+} @else {
+
+  <!-- ===================== PROGRAMADORES ===================== -->
+  <section class="py-16 bg-base-200" aria-labelledby="about-heading" appFadeIn>
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-10">
+        <h2 id="about-heading" class="text-3xl font-bold">Nuestro equipo</h2>
+        <p class="text-base-content/60 mt-2">Conoce a los profesionales detrás del portafolio</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto items-stretch">
+        @for (programmer of programmers(); track programmer.id) {
+          <app-programmer-card [programmer]="programmer" />
+        }
+      </div>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto items-stretch">
-      @for (programmer of programmers; track programmer.id) {
-        <app-programmer-card [programmer]="programmer" />
+  </section>
+
+  <!-- ===================== SERVICIOS ===================== -->
+  <section class="py-16 bg-base-100" aria-labelledby="services-heading" appFadeIn>
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-10">
+        <h2 id="services-heading" class="text-3xl font-bold">Servicios</h2>
+        <p class="text-base-content/60 mt-2">¿En qué puedo ayudarte?</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
+        @for (service of services(); track service.id) {
+          <app-service-card [service]="service" />
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PROYECTOS DESTACADOS ===================== -->
+  <section class="py-16 bg-base-200" aria-labelledby="projects-heading" appFadeIn>
+    <div class="container mx-auto px-4">
+      <div class="flex items-center justify-between mb-10">
+        <div>
+          <h2 id="projects-heading" class="text-3xl font-bold">Proyectos destacados</h2>
+          <p class="text-base-content/60 mt-1">Lo más relevante de mi portafolio</p>
+        </div>
+        <a routerLink="/proyectos" class="btn btn-outline btn-sm hidden md:inline-flex">
+          Ver todos
+          <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </a>
+      </div>
+      @if (featuredProjects()!.length > 0) {
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
+          @for (project of featuredProjects(); track project.id) {
+            <app-project-card [project]="project" />
+          }
+        </div>
+      } @else {
+        <p class="text-center text-base-content/50 py-8">No hay proyectos destacados aún.</p>
       }
-    </div>
-  </div>
-</section>
-
-<!-- ===================== SERVICIOS ===================== -->
-<section class="py-16 bg-base-100" aria-labelledby="services-heading" appFadeIn>
-  <div class="container mx-auto px-4">
-    <div class="text-center mb-10">
-      <h2 id="services-heading" class="text-3xl font-bold">Servicios</h2>
-      <p class="text-base-content/60 mt-2">¿En qué puedo ayudarte?</p>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
-      @for (service of services; track service.id) {
-        <app-service-card [service]="service" />
-      }
-    </div>
-  </div>
-</section>
-
-<!-- ===================== PROYECTOS DESTACADOS ===================== -->
-<section class="py-16 bg-base-200" aria-labelledby="projects-heading" appFadeIn>
-  <div class="container mx-auto px-4">
-    <div class="flex items-center justify-between mb-10">
-      <div>
-        <h2 id="projects-heading" class="text-3xl font-bold">Proyectos destacados</h2>
-        <p class="text-base-content/60 mt-1">Lo más relevante de mi portafolio</p>
-      </div>
-      <a routerLink="/proyectos" class="btn btn-outline btn-sm hidden md:inline-flex">
-        Ver todos
-        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-        </svg>
-      </a>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      @for (project of featuredProjects; track project.id) {
-        <app-project-card [project]="project" />
-      }
-    </div>
-    <div class="text-center mt-8 md:hidden">
-      <a routerLink="/proyectos" class="btn btn-outline btn-sm">Ver todos los proyectos</a>
-    </div>
-  </div>
-</section>
-
-<!-- ===================== CTA CONTACTO ===================== -->
-<section
-  class="py-20 bg-gradient-to-br from-slate-900 to-blue-900 relative overflow-hidden"
-  aria-labelledby="cta-heading"
-  appFadeIn
->
-  <!-- Dot pattern -->
-  <div
-    class="absolute inset-0 pointer-events-none"
-    style="background-image: radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px); background-size: 30px 30px;"
-    aria-hidden="true"
-  ></div>
-
-  <div class="container mx-auto px-4 text-center relative z-10">
-    <span class="inline-block text-amber-400 text-xs font-semibold tracking-widest uppercase mb-4">
-      Hablemos de tu proyecto
-    </span>
-
-    <h2 id="cta-heading" class="text-4xl md:text-5xl font-extrabold text-white mb-5 leading-tight">
-      ¿Tienes un proyecto en mente?
-    </h2>
-
-    <p class="text-blue-200 text-lg md:text-xl mb-10 max-w-2xl mx-auto leading-relaxed">
-      Cuéntanos tu idea y construiremos juntos la solución tecnológica que tu empresa necesita —
-      desde infraestructura de redes hasta desarrollo web a medida.
-    </p>
-
-    <div class="flex flex-wrap justify-center gap-4 mb-12">
-      <a
-        routerLink="/solicitud"
-        class="inline-flex items-center gap-2 bg-white text-slate-900 font-bold px-8 py-4 rounded-lg text-base transition-all duration-300 hover:bg-blue-50 hover:shadow-2xl hover:-translate-y-0.5"
-      >
-        Enviar Solicitud
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-        </svg>
-      </a>
-      <a
-        routerLink="/proyectos"
-        class="inline-flex items-center gap-2 border-2 border-white text-white font-bold px-8 py-4 rounded-lg text-base transition-all duration-300 hover:bg-white/10 hover:shadow-2xl hover:-translate-y-0.5"
-      >
-        Ver Proyectos
-      </a>
-    </div>
-
-    <div class="flex flex-wrap justify-center gap-8 md:gap-16">
-      <div class="flex items-center gap-2 text-white/80">
-        <span class="text-2xl" aria-hidden="true">⚡</span>
-        <span class="text-sm font-medium">Respuesta en 24h</span>
-      </div>
-      <div class="flex items-center gap-2 text-white/80">
-        <span class="text-2xl" aria-hidden="true">🛡️</span>
-        <span class="text-sm font-medium">Sin compromiso</span>
-      </div>
-      <div class="flex items-center gap-2 text-white/80">
-        <span class="text-2xl" aria-hidden="true">💬</span>
-        <span class="text-sm font-medium">Consulta gratuita</span>
+      <div class="text-center mt-8 md:hidden">
+        <a routerLink="/proyectos" class="btn btn-outline btn-sm">Ver todos los proyectos</a>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+
+  <!-- ===================== CTA CONTACTO ===================== -->
+  <section
+    class="py-20 bg-gradient-to-br from-slate-900 to-blue-900 relative overflow-hidden"
+    aria-labelledby="cta-heading"
+    appFadeIn
+  >
+    <!-- Dot pattern -->
+    <div
+      class="absolute inset-0 pointer-events-none"
+      style="background-image: radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px); background-size: 30px 30px;"
+      aria-hidden="true"
+    ></div>
+
+    <div class="container mx-auto px-4 text-center relative z-10">
+      <span class="inline-block text-amber-400 text-xs font-semibold tracking-widest uppercase mb-4">
+        Hablemos de tu proyecto
+      </span>
+
+      <h2 id="cta-heading" class="text-4xl md:text-5xl font-extrabold text-white mb-5 leading-tight">
+        ¿Tienes un proyecto en mente?
+      </h2>
+
+      <p class="text-blue-200 text-lg md:text-xl mb-10 max-w-2xl mx-auto leading-relaxed">
+        Cuéntanos tu idea y construiremos juntos la solución tecnológica que tu empresa necesita —
+        desde infraestructura de redes hasta desarrollo web a medida.
+      </p>
+
+      <div class="flex flex-wrap justify-center gap-4 mb-12">
+        <a
+          routerLink="/solicitud"
+          class="inline-flex items-center gap-2 bg-white text-slate-900 font-bold px-8 py-4 rounded-lg text-base transition-all duration-300 hover:bg-blue-50 hover:shadow-2xl hover:-translate-y-0.5"
+        >
+          Enviar Solicitud
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+        </a>
+        <a
+          routerLink="/proyectos"
+          class="inline-flex items-center gap-2 border-2 border-white text-white font-bold px-8 py-4 rounded-lg text-base transition-all duration-300 hover:bg-white/10 hover:shadow-2xl hover:-translate-y-0.5"
+        >
+          Ver Proyectos
+        </a>
+      </div>
+
+      <div class="flex flex-wrap justify-center gap-8 md:gap-16">
+        <div class="flex items-center gap-2 text-white/80">
+          <span class="text-2xl" aria-hidden="true">⚡</span>
+          <span class="text-sm font-medium">Respuesta en 24h</span>
+        </div>
+        <div class="flex items-center gap-2 text-white/80">
+          <span class="text-2xl" aria-hidden="true">🛡️</span>
+          <span class="text-sm font-medium">Sin compromiso</span>
+        </div>
+        <div class="flex items-center gap-2 text-white/80">
+          <span class="text-2xl" aria-hidden="true">💬</span>
+          <span class="text-sm font-medium">Consulta gratuita</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+}
